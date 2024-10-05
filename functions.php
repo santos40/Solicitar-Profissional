@@ -43,3 +43,23 @@ function requireAuth() {
         exit;
     }
 }
+
+function getAllProfissionais($conn) {
+    $stmt = $conn->query("SELECT * FROM profissionais ORDER BY nome");
+    return $stmt->fetchAll();
+}
+
+function updateProfissional($conn, $id, $nome, $categoria, $cidade, $whatsapp, $descricao, $youtube, $instagram, $website, $pago) {
+    $stmt = $conn->prepare("UPDATE profissionais SET nome = ?, categoria = ?, cidade = ?, whatsapp = ?, descricao = ?, youtube = ?, instagram = ?, website = ?, pago = ? WHERE id = ?");
+    $stmt->execute([$nome, $categoria, $cidade, $whatsapp, $descricao, $youtube, $instagram, $website, $pago, $id]);
+}
+
+function deleteProfissional($conn, $id) {
+    $stmt = $conn->prepare("DELETE FROM profissionais WHERE id = ?");
+    $stmt->execute([$id]);
+}
+
+function togglePagoProfissional($conn, $id, $pago) {
+    $stmt = $conn->prepare("UPDATE profissionais SET pago = ? WHERE id = ?");
+    $stmt->execute([$pago, $id]);
+}

@@ -5,7 +5,7 @@ include 'functions.php';
 
 requireAuth();
 
-$profissionais = getProfissionais($conn);
+$profissionais = getAllProfissionais($conn);
 $categorias = getCategorias($conn);
 ?>
 
@@ -38,13 +38,16 @@ $categorias = getCategorias($conn);
             <tbody>
                 <?php foreach ($profissionais as $profissional): ?>
                     <tr>
-                        <td><?php echo $profissional['nome']; ?></td>
-                        <td><?php echo $profissional['categoria']; ?></td>
-                        <td><?php echo $profissional['whatsapp']; ?></td>
+                        <td><?php echo htmlspecialchars($profissional['nome']); ?></td>
+                        <td><?php echo htmlspecialchars($profissional['categoria']); ?></td>
+                        <td><?php echo htmlspecialchars($profissional['whatsapp']); ?></td>
                         <td><?php echo $profissional['pago'] ? 'Pago' : 'Pendente'; ?></td>
                         <td>
                             <a href="editar_profissional.php?id=<?php echo $profissional['id']; ?>" class="btn-edit">Editar</a>
-                            <a href="remover_profissional.php?id=<?php echo $profissional['id']; ?>" class="btn-remove">Remover</a>
+                            <a href="deletar_profissional.php?id=<?php echo $profissional['id']; ?>" class="btn-delete" onclick="return confirm('Tem certeza que deseja deletar este profissional?');">Deletar</a>
+                            <a href="toggle_pago.php?id=<?php echo $profissional['id']; ?>&pago=<?php echo $profissional['pago'] ? '0' : '1'; ?>" class="btn-toggle-pago">
+                                <?php echo $profissional['pago'] ? 'Marcar como Não Pago' : 'Marcar como Pago'; ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
