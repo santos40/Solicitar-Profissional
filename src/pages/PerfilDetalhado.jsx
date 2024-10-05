@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2, Star, MapPin, Briefcase, Phone, Globe, Calendar, Tag, ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
+import { Share2, Star, MapPin, Briefcase, Phone, Globe, Calendar, Tag, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import AvaliacaoBotoes from '@/components/AvaliacaoBotoes';
 
 const mockCadastrados = [
   {
@@ -161,19 +162,6 @@ const ProfileInfo = ({ perfil }) => (
   </>
 );
 
-const LikeDislikeButtons = ({ perfil, handleLike, handleDislike }) => (
-  <div className="flex items-center space-x-4 mt-4">
-    <Button variant="outline" onClick={handleLike}>
-      <ThumbsUp className="mr-2 h-4 w-4" />
-      Like ({perfil.likes})
-    </Button>
-    <Button variant="outline" onClick={handleDislike}>
-      <ThumbsDown className="mr-2 h-4 w-4" />
-      Dislike ({perfil.dislikes})
-    </Button>
-  </div>
-);
-
 const Comments = ({ comments, newComment, setNewComment, handleCommentSubmit }) => (
   <div className="mt-6">
     <h3 className="text-lg font-semibold mb-2">Comentários e Feedback</h3>
@@ -260,7 +248,7 @@ const PerfilDetalhado = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <ProfileInfo perfil={perfil} />
-          <LikeDislikeButtons perfil={perfil} handleLike={handleLike} handleDislike={handleDislike} />
+          <AvaliacaoBotoes perfil={perfil} handleLike={handleLike} handleDislike={handleDislike} />
           <Button
             variant="default"
             className="w-full mt-4"
