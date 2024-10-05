@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -71,42 +72,53 @@ const Cadastrados = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCadastrados.map((item) => (
-          <Card key={item.id}>
-            <CardHeader>
-              <div className="flex items-center space-x-4">
-                <Avatar>
-                  <AvatarImage src={item.logo} alt={item.nome} />
-                  <AvatarFallback>{item.nome.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <CardTitle>{item.nome}</CardTitle>
-                  <CardDescription>{item.categoria}</CardDescription>
+          <Link to={`/perfil/${item.id}`} key={item.id} className="no-underline">
+            <Card className="h-full transition-shadow hover:shadow-lg">
+              <CardHeader>
+                <div className="flex items-center space-x-4">
+                  <Avatar>
+                    <AvatarImage src={item.logo} alt={item.nome} />
+                    <AvatarFallback>{item.nome.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle>{item.nome}</CardTitle>
+                    <CardDescription>{item.categoria}</CardDescription>
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p>Tipo: {item.tipo}</p>
-              <p>Cidade: {item.cidade}</p>
-              <div className="flex items-center space-x-2 mt-2">
-                <p>Avaliação:</p>
-                <div className="flex">{renderStars(item.rating)}</div>
-                <p className="text-sm text-gray-500">({item.rating})</p>
-              </div>
-              {item.website && <p>Website: {item.website}</p>}
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="default"
-                onClick={() => window.open(`https://wa.me/${item.whatsapp}`, '_blank')}
-              >
-                WhatsApp
-              </Button>
-              <Button variant="outline" onClick={() => handleShare(item)}>
-                <Share2 className="h-4 w-4 mr-2" />
-                Compartilhar
-              </Button>
-            </CardFooter>
-          </Card>
+              </CardHeader>
+              <CardContent>
+                <p>Tipo: {item.tipo}</p>
+                <p>Cidade: {item.cidade}</p>
+                <div className="flex items-center space-x-2 mt-2">
+                  <p>Avaliação:</p>
+                  <div className="flex">{renderStars(item.rating)}</div>
+                  <p className="text-sm text-gray-500">({item.rating})</p>
+                </div>
+                {item.website && <p>Website: {item.website}</p>}
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button
+                  variant="default"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open(`https://wa.me/${item.whatsapp}`, '_blank');
+                  }}
+                >
+                  WhatsApp
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleShare(item);
+                  }}
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Compartilhar
+                </Button>
+              </CardFooter>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

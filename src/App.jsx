@@ -10,6 +10,7 @@ import Cadastro from './pages/Cadastro';
 import CadastroEmpresa from './pages/CadastroEmpresa';
 import Pagamento from './pages/Pagamento';
 import Perfil from './pages/Perfil';
+import PerfilDetalhado from './pages/PerfilDetalhado';
 import Admin from './pages/Admin';
 import Orcamento from './pages/Orcamento';
 import Cadastrados from './pages/Cadastrados';
@@ -28,7 +29,7 @@ const App = () => (
               <Route path="/cadastro-profissional" element={<Cadastro />} />
               <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
               <Route path="/pagamento" element={<Pagamento />} />
-              <Route path="/perfil/:id" element={<Perfil />} />
+              <Route path="/perfil/:id" element={<PerfilDetalhado />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/orcamento" element={<Orcamento />} />
               <Route path="/cadastrados" element={<Cadastrados />} />
