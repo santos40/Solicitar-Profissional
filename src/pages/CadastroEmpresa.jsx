@@ -82,7 +82,7 @@ const CadastroEmpresa = () => {
             getFotosRootProps={getFotosRootProps}
             getFotosInputProps={getFotosInputProps}
           />
-          <Button type="submit">Cadastrar Empresa</Button>
+          <Button type="submit" className="w-full">Cadastrar Empresa</Button>
         </form>
       </Form>
     </div>
