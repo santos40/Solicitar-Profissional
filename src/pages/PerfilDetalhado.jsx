@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2, Star, MapPin, Briefcase, Phone, Globe, Calendar, Tag } from "lucide-react";
+import { Share2, Star, MapPin, Briefcase, Phone, Globe, Calendar, Tag, ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 
-// Updated mock data
+// Updated mock data with likes, dislikes, and comments
 const mockCadastrados = [
   {
     id: 1,
@@ -19,7 +20,13 @@ const mockCadastrados = [
     rating: 4.5,
     descricao: "Pedreiro experiente com mais de 15 anos no mercado. Especializado em construções residenciais e reformas.",
     tags: ["construção", "reforma", "alvenaria"],
-    dataCadastro: "2023-01-15"
+    dataCadastro: "2023-01-15",
+    likes: 25,
+    dislikes: 2,
+    comments: [
+      { author: "Maria", text: "Ótimo trabalho! Recomendo.", date: "2023-05-10" },
+      { author: "Pedro", text: "Profissional pontual e eficiente.", date: "2023-06-15" }
+    ]
   },
   {
     id: 2,
@@ -33,7 +40,10 @@ const mockCadastrados = [
     rating: 4.2,
     descricao: "Construtora com vasta experiência em obras de grande porte.",
     tags: ["construção", "empresa", "obras"],
-    dataCadastro: "2023-02-20"
+    dataCadastro: "2023-02-20",
+    likes: 15,
+    dislikes: 1,
+    comments: []
   },
   {
     id: 3,
@@ -46,7 +56,10 @@ const mockCadastrados = [
     rating: 4.8,
     descricao: "Eletricista qualificado, especializado em instalações residenciais.",
     tags: ["eletricidade", "instalações", "residencial"],
-    dataCadastro: "2023-03-10"
+    dataCadastro: "2023-03-10",
+    likes: 30,
+    dislikes: 0,
+    comments: []
   },
   {
     id: 4,
@@ -60,7 +73,10 @@ const mockCadastrados = [
     rating: 3.9,
     descricao: "Serviços de pintura interna e externa com qualidade garantida.",
     tags: ["pintura", "serviços", "qualidade"],
-    dataCadastro: "2023-04-05"
+    dataCadastro: "2023-04-05",
+    likes: 10,
+    dislikes: 5,
+    comments: []
   },
   {
     id: 5,
@@ -73,7 +89,10 @@ const mockCadastrados = [
     rating: 4.7,
     descricao: "Especialista em jardinagem e paisagismo.",
     tags: ["jardinagem", "paisagismo", "verde"],
-    dataCadastro: "2023-05-15"
+    dataCadastro: "2023-05-15",
+    likes: 20,
+    dislikes: 1,
+    comments: []
   },
   {
     id: 6,
@@ -85,13 +104,17 @@ const mockCadastrados = [
     rating: 4.1,
     descricao: "Instalações elétricas seguras e eficientes.",
     tags: ["instalações", "elétricas", "segurança"],
-    dataCadastro: "2023-06-25"
+    dataCadastro: "2023-06-25",
+    likes: 5,
+    dislikes: 0,
+    comments: []
   },
 ];
 
 const PerfilDetalhado = () => {
   const { id } = useParams();
-  const perfil = mockCadastrados.find(item => item.id === parseInt(id));
+  const [perfil, setPerfil] = useState(mockCadastrados.find(item => item.id === parseInt(id)));
+  const [newComment, setNewComment] = useState('');
 
   if (!perfil) {
     return <div>Perfil não encontrado</div>;
@@ -114,6 +137,30 @@ const PerfilDetalhado = () => {
       .catch((error) => console.log('Erro ao compartilhar', error));
     } else {
       alert('Compartilhamento não suportado neste navegador');
+    }
+  };
+
+  const handleLike = () => {
+    setPerfil(prev => ({ ...prev, likes: prev.likes + 1 }));
+  };
+
+  const handleDislike = () => {
+    setPerfil(prev => ({ ...prev, dislikes: prev.dislikes + 1 }));
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    if (newComment.trim()) {
+      const newCommentObj = {
+        author: "Usuário Anônimo", // In a real app, this would be the logged-in user
+        text: newComment,
+        date: new Date().toISOString().split('T')[0]
+      };
+      setPerfil(prev => ({
+        ...prev,
+        comments: [...prev.comments, newCommentObj]
+      }));
+      setNewComment('');
     }
   };
 
@@ -166,6 +213,41 @@ const PerfilDetalhado = () => {
               <Badge key={index} variant="secondary">{tag}</Badge>
             ))}
           </div>
+
+          <div className="flex items-center space-x-4 mt-4">
+            <Button variant="outline" onClick={handleLike}>
+              <ThumbsUp className="mr-2 h-4 w-4" />
+              Like ({perfil.likes})
+            </Button>
+            <Button variant="outline" onClick={handleDislike}>
+              <ThumbsDown className="mr-2 h-4 w-4" />
+              Dislike ({perfil.dislikes})
+            </Button>
+          </div>
+
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-2">Comentários e Feedback</h3>
+            {perfil.comments.map((comment, index) => (
+              <div key={index} className="bg-gray-100 p-3 rounded-md mb-2">
+                <p className="font-semibold">{comment.author}</p>
+                <p>{comment.text}</p>
+                <p className="text-sm text-gray-500">{comment.date}</p>
+              </div>
+            ))}
+          </div>
+
+          <form onSubmit={handleCommentSubmit} className="mt-4">
+            <Textarea
+              placeholder="Deixe seu comentário..."
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="mb-2"
+            />
+            <Button type="submit">
+              <MessageSquare className="mr-2 h-4 w-4" />
+              Enviar Comentário
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button
