@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const Cadastro = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nome: '',
     cidade: '',
@@ -71,8 +73,10 @@ const Cadastro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode implementar a lógica para enviar os dados para o backend
+    // Here you would implement the logic to send the data to the backend
     console.log(formData, logotipo, fotos);
+    // After successful submission, redirect to the payment page
+    navigate('/pagamento');
   };
 
   return (
