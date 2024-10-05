@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const Index = () => {
   const registrationOptions = [
@@ -11,9 +12,11 @@ const Index = () => {
   ];
 
   const exampleRequests = [
-    { service: 'Pintura predial', location: 'São Paulo', urgency: 'Urgente', contact: 'xx xxxx-xxxx' },
-    { service: 'Reforma de banheiro', location: 'Rio de Janeiro', urgency: 'Em 1 mês', contact: 'xx xxxx-xxxx' },
-    { service: 'Instalação elétrica', location: 'Belo Horizonte', urgency: 'Esta semana', contact: 'xx xxxx-xxxx' },
+    { service: 'Pintura predial', location: 'São Paulo', urgency: 'Urgente', contact: '11 9876-xxxx' },
+    { service: 'Reforma de banheiro', location: 'Rio de Janeiro', urgency: 'Em 1 mês', contact: '21 9876-xxxx' },
+    { service: 'Instalação elétrica', location: 'Belo Horizonte', urgency: 'Esta semana', contact: '31 9876-xxxx' },
+    { service: 'Limpeza de fachada', location: 'Curitiba', urgency: 'Próximo mês', contact: '41 9876-xxxx' },
+    { service: 'Construção de muro', location: 'Porto Alegre', urgency: 'Em 2 semanas', contact: '51 9876-xxxx' },
   ];
 
   return (
@@ -39,22 +42,28 @@ const Index = () => {
         ))}
       </div>
 
-      <h2 className="text-2xl font-bold mb-4">Exemplos de Pedidos de Orçamento</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {exampleRequests.map((request, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle>{request.service}</CardTitle>
-              <CardDescription>Local: {request.location}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Urgência: {request.urgency}</p>
-              <p>Contato: {request.contact}</p>
-              <p className="text-sm text-gray-500 mt-2">(Visível apenas para cadastrados)</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <h2 className="text-2xl font-bold mb-4">Pedidos de Orçamento Recentes</h2>
+      <Carousel className="w-full max-w-xs mx-auto">
+        <CarouselContent>
+          {exampleRequests.map((request, index) => (
+            <CarouselItem key={index}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{request.service}</CardTitle>
+                  <CardDescription>Local: {request.location}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>Urgência: {request.urgency}</p>
+                  <p>Contato: {request.contact}</p>
+                  <p className="text-sm text-gray-500 mt-2">(Completo para cadastrados)</p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 };
