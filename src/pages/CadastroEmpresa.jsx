@@ -1,7 +1,8 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useCallback } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useDropzone } from 'react-dropzone';
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,12 @@ const formSchema = z.object({
   telefone: z.string().min(10, "Telefone inválido"),
   endereco: z.string().min(5, "Endereço muito curto"),
   descricao: z.string().min(10, "A descrição deve ter pelo menos 10 caracteres"),
+  facebook: z.string().url("URL inválida").optional().or(z.literal('')),
+  instagram: z.string().url("URL inválida").optional().or(z.literal('')),
+  linkedin: z.string().url("URL inválida").optional().or(z.literal('')),
+  website: z.string().url("URL inválida").optional().or(z.literal('')),
+  logotipo: z.any(),
+  fotos: z.array(z.any()).max(4, "Máximo de 4 fotos permitidas"),
 });
 
 const CadastroEmpresa = () => {
@@ -26,6 +33,12 @@ const CadastroEmpresa = () => {
       telefone: "",
       endereco: "",
       descricao: "",
+      facebook: "",
+      instagram: "",
+      linkedin: "",
+      website: "",
+      logotipo: null,
+      fotos: [],
     },
   });
 
@@ -34,6 +47,26 @@ const CadastroEmpresa = () => {
     // Aqui você implementaria a lógica para enviar o cadastro da empresa
     alert("Empresa cadastrada com sucesso!");
   };
+
+  const onDropLogo = useCallback((acceptedFiles) => {
+    form.setValue('logotipo', acceptedFiles[0]);
+  }, [form]);
+
+  const onDropFotos = useCallback((acceptedFiles) => {
+    form.setValue('fotos', acceptedFiles.slice(0, 4));
+  }, [form]);
+
+  const { getRootProps: getLogoRootProps, getInputProps: getLogoInputProps } = useDropzone({
+    onDrop: onDropLogo,
+    accept: 'image/*',
+    maxFiles: 1
+  });
+
+  const { getRootProps: getFotosRootProps, getInputProps: getFotosInputProps } = useDropzone({
+    onDrop: onDropFotos,
+    accept: 'image/*',
+    maxFiles: 4
+  });
 
   return (
     <div className="container mx-auto mt-8 p-4">
@@ -122,6 +155,105 @@ const CadastroEmpresa = () => {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="facebook"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Facebook</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://facebook.com/suaempresa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="instagram"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Instagram</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://instagram.com/suaempresa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="linkedin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>LinkedIn</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://linkedin.com/company/suaempresa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="website"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Website</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://www.suaempresa.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="logotipo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Logotipo</FormLabel>
+                <FormControl>
+                  <div {...getLogoRootProps()} className="border-2 border-dashed border-gray-300 rounded-md p-4 text-center cursor-pointer">
+                    <input {...getLogoInputProps()} />
+                    <p>Arraste e solte o logotipo aqui, ou clique para selecionar</p>
+                  </div>
+                </FormControl>
+                {field.value && <p className="mt-2">{field.value.name}</p>}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="fotos"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Fotos (máximo 4)</FormLabel>
+                <FormControl>
+                  <div {...getFotosRootProps()} className="border-2 border-dashed border-gray-300 rounded-md p-4 text-center cursor-pointer">
+                    <input {...getFotosInputProps()} />
+                    <p>Arraste e solte até 4 fotos aqui, ou clique para selecionar</p>
+                  </div>
+                </FormControl>
+                {field.value.length > 0 && (
+                  <ul className="mt-2">
+                    {field.value.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
           <Button type="submit">Cadastrar Empresa</Button>
         </form>
       </Form>
