@@ -4,7 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+
+const categorias = [
+  { value: 'pedreiro', label: 'Pedreiro' },
+  { value: 'diarista', label: 'Diarista' },
+  { value: 'eletricista', label: 'Eletricista' },
+  { value: 'encanador', label: 'Encanador' },
+  { value: 'pintor', label: 'Pintor' },
+];
 
 const Cadastro = () => {
   const form = useForm();
@@ -31,6 +40,30 @@ const Cadastro = () => {
                 <FormControl>
                   <Input placeholder="Seu nome completo" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="categoria"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoria</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione uma categoria" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categorias.map((categoria) => (
+                      <SelectItem key={categoria.value} value={categoria.value}>
+                        {categoria.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
