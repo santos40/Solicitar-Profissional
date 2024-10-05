@@ -9,6 +9,7 @@ import Cadastro from './pages/Cadastro';
 import Pagamento from './pages/Pagamento';
 import Perfil from './pages/Perfil';
 import Admin from './pages/Admin';
+import Orcamento from './pages/Orcamento';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/pagamento" element={<Pagamento />} />
           <Route path="/perfil/:id" element={<Perfil />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/orcamento" element={<Orcamento />} />
         </Routes>
         <Toaster />
       </Router>
