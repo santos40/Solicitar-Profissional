@@ -46,6 +46,19 @@ const Cadastro = () => {
           />
           <FormField
             control={form.control}
+            name="cidade"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cidade</FormLabel>
+                <FormControl>
+                  <Input placeholder="Sua cidade" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="categoria"
             render={({ field }) => (
               <FormItem>
