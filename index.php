@@ -3,19 +3,14 @@ session_start();
 include 'config.php';
 include 'functions.php';
 
-$page_title = "ViaWhatsApp - Portal de Profissionais da Construção e Limpeza";
-$page_description = "Encontre profissionais qualificados da construção e limpeza. Conecte-se diretamente via WhatsApp.";
-
 $profissionais = getProfissionais($conn);
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $page_title; ?></title>
-    <meta name="description" content="<?php echo $page_description; ?>">
+    <title>ViaWhatsApp - Portal de Profissionais</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -33,15 +28,13 @@ $profissionais = getProfissionais($conn);
         <div class="profissionais-grid">
             <?php foreach ($profissionais as $profissional): ?>
                 <div class="profissional-card">
-                    <img src="<?php echo $profissional['logo']; ?>" alt="<?php echo $profissional['nome']; ?>">
-                    <h2><?php echo $profissional['nome']; ?></h2>
-                    <p><?php echo $profissional['categoria']; ?> - <?php echo $profissional['cidade']; ?></p>
-                    <p><?php echo substr($profissional['descricao'], 0, 100); ?>...</p>
+                    <img src="<?php echo htmlspecialchars($profissional['logo']); ?>" alt="<?php echo htmlspecialchars($profissional['nome']); ?>">
+                    <h2><?php echo htmlspecialchars($profissional['nome']); ?></h2>
+                    <p><?php echo htmlspecialchars($profissional['categoria']); ?> - <?php echo htmlspecialchars($profissional['cidade']); ?></p>
+                    <p><?php echo htmlspecialchars(substr($profissional['descricao'], 0, 100)); ?>...</p>
                     <a href="perfil.php?id=<?php echo $profissional['id']; ?>" class="btn-perfil">Ver Perfil</a>
-                    <a href="https://wa.me/<?php echo $profissional['whatsapp']; ?>" class="btn-whatsapp" target="_blank">
-                        WhatsApp
-                    </a>
-                    <button class="btn-share" onclick="compartilhar('<?php echo $profissional['nome']; ?>', '<?php echo $profissional['id']; ?>')">Compartilhar</button>
+                    <a href="https://wa.me/<?php echo htmlspecialchars($profissional['whatsapp']); ?>" class="btn-whatsapp" target="_blank">WhatsApp</a>
+                    <button class="btn-share" onclick="compartilhar('<?php echo htmlspecialchars($profissional['nome']); ?>', '<?php echo $profissional['id']; ?>')">Compartilhar</button>
                 </div>
             <?php endforeach; ?>
         </div>
