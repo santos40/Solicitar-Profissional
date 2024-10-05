@@ -11,6 +11,7 @@ const Navbar = () => {
           <li><Link to="/cadastro" className="hover:text-accent-foreground">Cadastro</Link></li>
           <li><Link to="/sobre" className="hover:text-accent-foreground">Sobre</Link></li>
           <li><Link to="/contato" className="hover:text-accent-foreground">Contato</Link></li>
+          <li><Link to="/admin" className="hover:text-accent-foreground">Admin</Link></li>
         </ul>
       </div>
     </nav>

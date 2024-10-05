@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Index from './pages/Index';
 import Cadastro from './pages/Cadastro';
 import Pagamento from './pages/Pagamento';
+import Perfil from './pages/Perfil';
+import Admin from './pages/Admin';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +21,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/pagamento" element={<Pagamento />} />
-          {/* Adicione mais rotas aqui conforme necessário */}
+          <Route path="/perfil/:id" element={<Perfil />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
         <Toaster />
       </Router>
