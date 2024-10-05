@@ -11,6 +11,7 @@ const Navbar = () => {
           <li><Link to="/cadastro-profissional" className="hover:text-accent-foreground">Cadastro Profissional</Link></li>
           <li><Link to="/cadastro-empresa" className="hover:text-accent-foreground">Cadastro Empresa</Link></li>
           <li><Link to="/orcamento" className="hover:text-accent-foreground">Solicitar Orçamento</Link></li>
+          <li><Link to="/cadastrados" className="hover:text-accent-foreground">Cadastrados</Link></li>
         </ul>
       </div>
     </nav>
