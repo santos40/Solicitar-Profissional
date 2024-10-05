@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
     nome: '',
     cidade: '',
     profissao: '',
-    whatsapp: '',
+    whatsapp: '+55',
     youtube: '',
     facebook: '',
     instagram: '',
@@ -19,10 +20,33 @@ const Cadastro = () => {
 
   const [logotipo, setLogotipo] = useState(null);
   const [fotos, setFotos] = useState([]);
+  const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [currentLinkField, setCurrentLinkField] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({ ...prevState, [name]: value }));
+    if (name === 'whatsapp' && !value.startsWith('+55')) {
+      setFormData(prevState => ({ ...prevState, [name]: '+55' + value }));
+    } else {
+      setFormData(prevState => ({ ...prevState, [name]: value }));
+    }
+  };
+
+  const handleLinkInputChange = (name, value) => {
+    if (!value.startsWith('http://') && !value.startsWith('https://')) {
+      setCurrentLinkField(name);
+      setShowLinkDialog(true);
+    } else {
+      setFormData(prevState => ({ ...prevState, [name]: value }));
+    }
+  };
+
+  const handleAddHttp = () => {
+    setFormData(prevState => ({
+      ...prevState,
+      [currentLinkField]: 'http://' + prevState[currentLinkField]
+    }));
+    setShowLinkDialog(false);
   };
 
   const onDropLogo = (acceptedFiles) => {
@@ -95,22 +119,37 @@ const Cadastro = () => {
         </div>
         <div>
           <Label htmlFor="youtube">Canal do YouTube</Label>
-          <Input type="url" id="youtube" name="youtube" value={formData.youtube} onChange={handleInputChange} />
+          <Input type="url" id="youtube" name="youtube" value={formData.youtube} onChange={(e) => handleLinkInputChange('youtube', e.target.value)} />
         </div>
         <div>
           <Label htmlFor="facebook">Facebook</Label>
-          <Input type="url" id="facebook" name="facebook" value={formData.facebook} onChange={handleInputChange} />
+          <Input type="url" id="facebook" name="facebook" value={formData.facebook} onChange={(e) => handleLinkInputChange('facebook', e.target.value)} />
         </div>
         <div>
           <Label htmlFor="instagram">Instagram</Label>
-          <Input type="url" id="instagram" name="instagram" value={formData.instagram} onChange={handleInputChange} />
+          <Input type="url" id="instagram" name="instagram" value={formData.instagram} onChange={(e) => handleLinkInputChange('instagram', e.target.value)} />
         </div>
         <div>
           <Label htmlFor="website">Website</Label>
-          <Input type="url" id="website" name="website" value={formData.website} onChange={handleInputChange} />
+          <Input type="url" id="website" name="website" value={formData.website} onChange={(e) => handleLinkInputChange('website', e.target.value)} />
         </div>
         <Button type="submit" className="w-full">Cadastrar</Button>
       </form>
+
+      <AlertDialog open={showLinkDialog} onOpenChange={setShowLinkDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Adicionar http://</AlertDialogTitle>
+            <AlertDialogDescription>
+              O link inserido não começa com http:// ou https://. Deseja adicionar http:// ao início do link?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowLinkDialog(false)}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleAddHttp}>Adicionar http://</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
