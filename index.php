@@ -15,7 +15,6 @@ $page_description = "Encontre profissionais qualificados da construção e limpe
     <title><?php echo $page_title; ?></title>
     <meta name="description" content="<?php echo $page_description; ?>">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Adicione aqui mais meta tags para SEO -->
 </head>
 <body>
     <header>
@@ -39,7 +38,6 @@ $page_description = "Encontre profissionais qualificados da construção e limpe
         <p>Encontre os melhores profissionais da construção e limpeza.</p>
 
         <?php
-        // Buscar profissionais do banco de dados
         $profissionais = getProfissionais($conn);
 
         foreach ($profissionais as $profissional):
