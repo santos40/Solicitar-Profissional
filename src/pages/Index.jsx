@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
   const registrationOptions = [
     { title: 'Profissional', description: 'Cadastre-se como profissional e ofereça seus serviços', link: '/cadastro-profissional' },
     { title: 'Empresa', description: 'Cadastre sua empresa e conecte-se com clientes', link: '/cadastro-empresa' },
@@ -19,10 +23,33 @@ const Index = () => {
     { service: 'Construção de muro', location: 'Porto Alegre', urgency: 'Em 2 semanas', contact: '51 9876-xxxx' },
   ];
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Implement search functionality here
+    console.log('Searching for:', searchQuery);
+    // You would typically make an API call or filter results here
+  };
+
   return (
     <div className="container mx-auto mt-8 px-4">
       <h1 className="text-3xl font-bold mb-4">Bem-vindo ao ViaWhatsApp</h1>
       <p className="mb-8">Encontre profissionais e serviços facilmente através do WhatsApp.</p>
+
+      <form onSubmit={handleSearch} className="mb-8">
+        <div className="flex">
+          <Input
+            type="text"
+            placeholder="Buscar profissionais, serviços ou cidades..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-grow"
+          />
+          <Button type="submit" className="ml-2">
+            <Search className="h-4 w-4 mr-2" />
+            Buscar
+          </Button>
+        </div>
+      </form>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {registrationOptions.map((option, index) => (
