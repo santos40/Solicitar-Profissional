@@ -20,3 +20,26 @@ function getProfissionalById($conn, $id) {
     $stmt->execute([$id]);
     return $stmt->fetch();
 }
+
+function getAdminByUsername($conn, $username) {
+    $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ?");
+    $stmt->execute([$username]);
+    return $stmt->fetch();
+}
+
+function updateAdminPassword($conn, $adminId, $newPassword) {
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("UPDATE admins SET password = ?, is_first_access = FALSE WHERE id = ?");
+    $stmt->execute([$hashedPassword, $adminId]);
+}
+
+function isAuthenticated() {
+    return isset($_SESSION['admin_id']);
+}
+
+function requireAuth() {
+    if (!isAuthenticated()) {
+        header('Location: admin_login.php');
+        exit;
+    }
+}
