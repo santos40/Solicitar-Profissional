@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, Share2, Star } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-// Mock data for professionals and companies
+// Update the mock data to include logo and rating
 const mockCadastrados = [
-  { id: 1, nome: "João Silva", categoria: "Pedreiro", cidade: "São Paulo", whatsapp: "+55 11 98765-4321", tipo: "Profissional" },
-  { id: 2, nome: "Maria Construções Ltda.", categoria: "Construtora", cidade: "Rio de Janeiro", whatsapp: "+55 21 98765-4321", website: "www.mariaconstrucoes.com.br", tipo: "Empresa" },
-  { id: 3, nome: "Carlos Eletricista", categoria: "Eletricista", cidade: "Belo Horizonte", whatsapp: "+55 31 98765-4321", tipo: "Profissional" },
-  { id: 4, nome: "Pinturas & Cia", categoria: "Pintura", cidade: "Salvador", whatsapp: "+55 71 98765-4321", website: "www.pinturasecia.com.br", tipo: "Empresa" },
-  { id: 5, nome: "Ana Jardins", categoria: "Jardinagem", cidade: "Curitiba", whatsapp: "+55 41 98765-4321", tipo: "Profissional" },
-  { id: 6, nome: "Tech Instalações ME", categoria: "Instalações Elétricas", cidade: "Porto Alegre", whatsapp: "+55 51 98765-4321", website: "www.techinstalacoes.com.br", tipo: "Empresa" },
+  { id: 1, nome: "João Silva", categoria: "Pedreiro", cidade: "São Paulo", whatsapp: "+5511987654321", tipo: "Profissional", logo: "/placeholder.svg", rating: 4.5 },
+  { id: 2, nome: "Maria Construções Ltda.", categoria: "Construtora", cidade: "Rio de Janeiro", whatsapp: "+5521987654321", website: "www.mariaconstrucoes.com.br", tipo: "Empresa", logo: "/placeholder.svg", rating: 4.2 },
+  { id: 3, nome: "Carlos Eletricista", categoria: "Eletricista", cidade: "Belo Horizonte", whatsapp: "+5531987654321", tipo: "Profissional", logo: "/placeholder.svg", rating: 4.8 },
+  { id: 4, nome: "Pinturas & Cia", categoria: "Pintura", cidade: "Salvador", whatsapp: "+5571987654321", website: "www.pinturasecia.com.br", tipo: "Empresa", logo: "/placeholder.svg", rating: 3.9 },
+  { id: 5, nome: "Ana Jardins", categoria: "Jardinagem", cidade: "Curitiba", whatsapp: "+5541987654321", tipo: "Profissional", logo: "/placeholder.svg", rating: 4.7 },
+  { id: 6, nome: "Tech Instalações ME", categoria: "Instalações Elétricas", cidade: "Porto Alegre", whatsapp: "+5551987654321", website: "www.techinstalacoes.com.br", tipo: "Empresa", logo: "/placeholder.svg", rating: 4.1 },
 ];
 
 const Cadastrados = () => {
@@ -26,6 +27,26 @@ const Cadastrados = () => {
       item.cidade.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredCadastrados(filtered);
+  };
+
+  const handleShare = (item) => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${item.nome} - ${item.categoria}`,
+        text: `Confira ${item.nome}, ${item.categoria} em ${item.cidade}`,
+        url: window.location.href,
+      })
+      .then(() => console.log('Conteúdo compartilhado com sucesso'))
+      .catch((error) => console.log('Erro ao compartilhar', error));
+    } else {
+      alert('Compartilhamento não suportado neste navegador');
+    }
+  };
+
+  const renderStars = (rating) => {
+    return Array(5).fill(0).map((_, i) => (
+      <Star key={i} className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+    ));
   };
 
   return (
@@ -52,15 +73,39 @@ const Cadastrados = () => {
         {filteredCadastrados.map((item) => (
           <Card key={item.id}>
             <CardHeader>
-              <CardTitle>{item.nome}</CardTitle>
-              <CardDescription>{item.categoria}</CardDescription>
+              <div className="flex items-center space-x-4">
+                <Avatar>
+                  <AvatarImage src={item.logo} alt={item.nome} />
+                  <AvatarFallback>{item.nome.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <CardTitle>{item.nome}</CardTitle>
+                  <CardDescription>{item.categoria}</CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               <p>Tipo: {item.tipo}</p>
               <p>Cidade: {item.cidade}</p>
-              <p>WhatsApp: {item.whatsapp}</p>
+              <div className="flex items-center space-x-2 mt-2">
+                <p>Avaliação:</p>
+                <div className="flex">{renderStars(item.rating)}</div>
+                <p className="text-sm text-gray-500">({item.rating})</p>
+              </div>
               {item.website && <p>Website: {item.website}</p>}
             </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button
+                variant="default"
+                onClick={() => window.open(`https://wa.me/${item.whatsapp}`, '_blank')}
+              >
+                WhatsApp
+              </Button>
+              <Button variant="outline" onClick={() => handleShare(item)}>
+                <Share2 className="h-4 w-4 mr-2" />
+                Compartilhar
+              </Button>
+            </CardFooter>
           </Card>
         ))}
       </div>
