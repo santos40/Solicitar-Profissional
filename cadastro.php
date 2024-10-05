@@ -5,13 +5,14 @@ include 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
+    $categoria = $_POST['categoria'];
+    $cidade = $_POST['cidade'];
     $whatsapp = $_POST['whatsapp'];
     $descricao = $_POST['descricao'];
     $youtube = $_POST['youtube'];
     $instagram = $_POST['instagram'];
     $website = $_POST['website'];
 
-    // Processar o upload do logo
     $logo = '';
     if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'uploads/';
@@ -23,14 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Inserir dados no banco de dados
-    $stmt = $conn->prepare("INSERT INTO profissionais (nome, whatsapp, descricao, youtube, instagram, website, logo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$nome, $whatsapp, $descricao, $youtube, $instagram, $website, $logo]);
+    $stmt = $conn->prepare("INSERT INTO profissionais (nome, categoria, cidade, whatsapp, descricao, youtube, instagram, website, logo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$nome, $categoria, $cidade, $whatsapp, $descricao, $youtube, $instagram, $website, $logo]);
 
-    // Redirecionar para a página de pagamento
     header('Location: pagamento.php');
     exit;
 }
+
+$categorias = getCategorias($conn);
 ?>
 
 <!DOCTYPE html>
@@ -42,27 +43,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="cadastro.php">Cadastro</a></li>
-                <li><a href="pesquisa.php">Pesquisa</a></li>
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <li><a href="perfil.php">Perfil</a></li>
-                    <li><a href="logout.php">Sair</a></li>
-                <?php else: ?>
-                    <li><a href="login.php">Login</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
+    <?php include 'header.php'; ?>
 
     <main>
         <h1>Cadastro de Profissional</h1>
         <form action="cadastro.php" method="POST" enctype="multipart/form-data">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" required>
+
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" name="categoria" required>
+                <?php foreach ($categorias as $categoria): ?>
+                    <option value="<?php echo $categoria['nome']; ?>"><?php echo $categoria['nome']; ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" name="cidade" required>
 
             <label for="whatsapp">WhatsApp:</label>
             <input type="text" id="whatsapp" name="whatsapp" required>
@@ -86,8 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </main>
 
-    <footer>
-        <p>&copy; 2024 ViaWhatsApp. Todos os direitos reservados.</p>
-    </footer>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

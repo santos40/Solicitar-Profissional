@@ -5,7 +5,6 @@ include 'functions.php';
 
 // Aqui você implementaria a lógica de processamento do pagamento
 // Por enquanto, vamos apenas exibir as opções de pagamento
-
 ?>
 
 <!DOCTYPE html>
