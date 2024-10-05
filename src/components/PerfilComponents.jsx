@@ -1,12 +1,18 @@
 import React from 'react';
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Briefcase, Phone, Globe, Calendar, Tag, MessageSquare } from "lucide-react";
+import { MapPin, Briefcase, Phone, Globe, Calendar, Tag, MessageSquare, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 
-export const ProfileHeader = ({ perfil, renderStars }) => (
+const renderStars = (rating) => {
+  return Array(5).fill(0).map((_, i) => (
+    <Star key={i} className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+  ));
+};
+
+export const ProfileHeader = ({ perfil }) => (
   <div className="flex items-center space-x-4">
     <Avatar className="w-24 h-24">
       <AvatarImage src={perfil.logo} alt={perfil.nome} />
@@ -20,6 +26,26 @@ export const ProfileHeader = ({ perfil, renderStars }) => (
         <span className="ml-2">({perfil.rating})</span>
       </div>
     </div>
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": perfil.nome,
+        "image": perfil.logo,
+        "description": perfil.descricao,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": perfil.cidade
+        },
+        "telephone": perfil.whatsapp,
+        "url": perfil.website,
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": perfil.rating,
+          "reviewCount": perfil.likes + perfil.dislikes
+        }
+      })}
+    </script>
   </div>
 );
 
