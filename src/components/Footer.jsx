@@ -10,8 +10,8 @@ const Footer = () => {
         </div>
         <div>
           <ul className="flex space-x-4">
-            <li><Link to="/termos" className="hover:text-accent-foreground">Termos de Uso</Link></li>
-            <li><Link to="/privacidade" className="hover:text-accent-foreground">Política de Privacidade</Link></li>
+            <li><Link to="/contato" className="hover:text-accent-foreground">Contato</Link></li>
+            <li><Link to="/admin" className="hover:text-accent-foreground">Admin</Link></li>
           </ul>
         </div>
       </div>
