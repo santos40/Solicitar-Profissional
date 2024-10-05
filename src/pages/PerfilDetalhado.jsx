@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 
-// Updated mock data with likes, dislikes, and comments
 const mockCadastrados = [
   {
     id: 1,
@@ -111,6 +110,95 @@ const mockCadastrados = [
   },
 ];
 
+const ProfileHeader = ({ perfil, renderStars }) => (
+  <div className="flex items-center space-x-4">
+    <Avatar className="w-24 h-24">
+      <AvatarImage src={perfil.logo} alt={perfil.nome} />
+      <AvatarFallback>{perfil.nome.charAt(0)}</AvatarFallback>
+    </Avatar>
+    <div>
+      <CardTitle className="text-3xl">{perfil.nome}</CardTitle>
+      <CardDescription className="text-xl">{perfil.categoria}</CardDescription>
+      <div className="flex items-center mt-2">
+        {renderStars(perfil.rating)}
+        <span className="ml-2">({perfil.rating})</span>
+      </div>
+    </div>
+  </div>
+);
+
+const ProfileInfo = ({ perfil }) => (
+  <>
+    <p className="text-gray-700">{perfil.descricao}</p>
+    <div className="flex items-center">
+      <MapPin className="mr-2" />
+      <span>{perfil.cidade}</span>
+    </div>
+    <div className="flex items-center">
+      <Briefcase className="mr-2" />
+      <span>{perfil.tipo}</span>
+    </div>
+    <div className="flex items-center">
+      <Phone className="mr-2" />
+      <span>{perfil.whatsapp}</span>
+    </div>
+    {perfil.website && (
+      <div className="flex items-center">
+        <Globe className="mr-2" />
+        <a href={perfil.website} target="_blank" rel="noopener noreferrer">{perfil.website}</a>
+      </div>
+    )}
+    <div className="flex items-center">
+      <Calendar className="mr-2" />
+      <span>Cadastrado em: {new Date(perfil.dataCadastro).toLocaleDateString()}</span>
+    </div>
+    <div className="flex flex-wrap items-center gap-2">
+      <Tag className="mr-2" />
+      {perfil.tags.map((tag, index) => (
+        <Badge key={index} variant="secondary">{tag}</Badge>
+      ))}
+    </div>
+  </>
+);
+
+const LikeDislikeButtons = ({ perfil, handleLike, handleDislike }) => (
+  <div className="flex items-center space-x-4 mt-4">
+    <Button variant="outline" onClick={handleLike}>
+      <ThumbsUp className="mr-2 h-4 w-4" />
+      Like ({perfil.likes})
+    </Button>
+    <Button variant="outline" onClick={handleDislike}>
+      <ThumbsDown className="mr-2 h-4 w-4" />
+      Dislike ({perfil.dislikes})
+    </Button>
+  </div>
+);
+
+const Comments = ({ comments, newComment, setNewComment, handleCommentSubmit }) => (
+  <div className="mt-6">
+    <h3 className="text-lg font-semibold mb-2">Comentários e Feedback</h3>
+    {comments.map((comment, index) => (
+      <div key={index} className="bg-gray-100 p-3 rounded-md mb-2">
+        <p className="font-semibold">{comment.author}</p>
+        <p>{comment.text}</p>
+        <p className="text-sm text-gray-500">{comment.date}</p>
+      </div>
+    ))}
+    <form onSubmit={handleCommentSubmit} className="mt-4">
+      <Textarea
+        placeholder="Deixe seu comentário..."
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+        className="mb-2"
+      />
+      <Button type="submit">
+        <MessageSquare className="mr-2 h-4 w-4" />
+        Enviar Comentário
+      </Button>
+    </form>
+  </div>
+);
+
 const PerfilDetalhado = () => {
   const { id } = useParams();
   const [perfil, setPerfil] = useState(mockCadastrados.find(item => item.id === parseInt(id)));
@@ -152,7 +240,7 @@ const PerfilDetalhado = () => {
     e.preventDefault();
     if (newComment.trim()) {
       const newCommentObj = {
-        author: "Usuário Anônimo", // In a real app, this would be the logged-in user
+        author: "Usuário Anônimo",
         text: newComment,
         date: new Date().toISOString().split('T')[0]
       };
@@ -168,94 +256,26 @@ const PerfilDetalhado = () => {
     <div className="container mx-auto mt-8 px-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <div className="flex items-center space-x-4">
-            <Avatar className="w-24 h-24">
-              <AvatarImage src={perfil.logo} alt={perfil.nome} />
-              <AvatarFallback>{perfil.nome.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle className="text-3xl">{perfil.nome}</CardTitle>
-              <CardDescription className="text-xl">{perfil.categoria}</CardDescription>
-              <div className="flex items-center mt-2">
-                {renderStars(perfil.rating)}
-                <span className="ml-2">({perfil.rating})</span>
-              </div>
-            </div>
-          </div>
+          <ProfileHeader perfil={perfil} renderStars={renderStars} />
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-gray-700">{perfil.descricao}</p>
-          <div className="flex items-center">
-            <MapPin className="mr-2" />
-            <span>{perfil.cidade}</span>
-          </div>
-          <div className="flex items-center">
-            <Briefcase className="mr-2" />
-            <span>{perfil.tipo}</span>
-          </div>
-          <div className="flex items-center">
-            <Phone className="mr-2" />
-            <span>{perfil.whatsapp}</span>
-          </div>
-          {perfil.website && (
-            <div className="flex items-center">
-              <Globe className="mr-2" />
-              <a href={perfil.website} target="_blank" rel="noopener noreferrer">{perfil.website}</a>
-            </div>
-          )}
-          <div className="flex items-center">
-            <Calendar className="mr-2" />
-            <span>Cadastrado em: {new Date(perfil.dataCadastro).toLocaleDateString()}</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Tag className="mr-2" />
-            {perfil.tags.map((tag, index) => (
-              <Badge key={index} variant="secondary">{tag}</Badge>
-            ))}
-          </div>
-
-          <div className="flex items-center space-x-4 mt-4">
-            <Button variant="outline" onClick={handleLike}>
-              <ThumbsUp className="mr-2 h-4 w-4" />
-              Like ({perfil.likes})
-            </Button>
-            <Button variant="outline" onClick={handleDislike}>
-              <ThumbsDown className="mr-2 h-4 w-4" />
-              Dislike ({perfil.dislikes})
-            </Button>
-          </div>
-
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">Comentários e Feedback</h3>
-            {perfil.comments.map((comment, index) => (
-              <div key={index} className="bg-gray-100 p-3 rounded-md mb-2">
-                <p className="font-semibold">{comment.author}</p>
-                <p>{comment.text}</p>
-                <p className="text-sm text-gray-500">{comment.date}</p>
-              </div>
-            ))}
-          </div>
-
-          <form onSubmit={handleCommentSubmit} className="mt-4">
-            <Textarea
-              placeholder="Deixe seu comentário..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              className="mb-2"
-            />
-            <Button type="submit">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Enviar Comentário
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
+          <ProfileInfo perfil={perfil} />
+          <LikeDislikeButtons perfil={perfil} handleLike={handleLike} handleDislike={handleDislike} />
           <Button
             variant="default"
+            className="w-full mt-4"
             onClick={() => window.open(`https://wa.me/${perfil.whatsapp}`, '_blank')}
           >
             Contatar via WhatsApp
           </Button>
+          <Comments
+            comments={perfil.comments}
+            newComment={newComment}
+            setNewComment={setNewComment}
+            handleCommentSubmit={handleCommentSubmit}
+          />
+        </CardContent>
+        <CardFooter className="flex justify-end">
           <Button variant="outline" onClick={handleShare}>
             <Share2 className="h-4 w-4 mr-2" />
             Compartilhar
