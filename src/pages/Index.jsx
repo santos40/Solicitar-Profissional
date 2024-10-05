@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const registrationOptions = [
-    { title: 'Profissional', description: 'Cadastre-se como profissional e ofereça seus serviços', link: '/cadastro' },
-    { title: 'Cliente', description: 'Cadastre-se como cliente para encontrar profissionais', link: '/cadastro-cliente' },
+    { title: 'Profissional', description: 'Cadastre-se como profissional e ofereça seus serviços', link: '/cadastro-profissional' },
+    { title: 'Cliente', description: 'Solicite um orçamento para encontrar profissionais', link: '/orcamento' },
     { title: 'Empresa', description: 'Cadastre sua empresa e conecte-se com clientes', link: '/cadastro-empresa' },
   ];
 
@@ -24,7 +24,9 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <Link to={option.link}>
-                <Button className="w-full">Cadastrar como {option.title}</Button>
+                <Button className="w-full">
+                  {option.title === 'Cliente' ? 'Solicitar Orçamento' : `Cadastrar como ${option.title}`}
+                </Button>
               </Link>
             </CardContent>
           </Card>
