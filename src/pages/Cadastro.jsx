@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,10 +8,13 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 
 const Cadastro = () => {
   const form = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
     // Aqui você implementará a lógica para enviar os dados para o backend
+    // Após o envio bem-sucedido, redirecione para a página de pagamento
+    navigate('/pagamento');
   };
 
   return (
@@ -91,6 +95,19 @@ const Cadastro = () => {
                 <FormLabel>Website</FormLabel>
                 <FormControl>
                   <Input placeholder="https://seu-site.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="logo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Logotipo</FormLabel>
+                <FormControl>
+                  <Input type="file" accept="image/*" onChange={(e) => field.onChange(e.target.files[0])} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
