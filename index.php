@@ -17,6 +17,10 @@ $profissionais = getProfissionais($conn);
     <?php include 'header.php'; ?>
 
     <main>
+        <!-- Área para a aplicação React -->
+        <div id="react-root"></div>
+
+        <!-- Conteúdo PHP existente -->
         <h1>Bem-vindo ao ViaWhatsApp</h1>
         <p>Encontre os melhores profissionais da construção e limpeza.</p>
 
@@ -42,6 +46,9 @@ $profissionais = getProfissionais($conn);
 
     <?php include 'footer.php'; ?>
 
+    <!-- Scripts para carregar a aplicação React -->
+    <script src="/.gpt_engineer/index.js" type="module"></script>
+    <script src="/src/main.jsx" type="module"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
