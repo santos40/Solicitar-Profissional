@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import Index from './pages/Index';
 import Cadastro from './pages/Cadastro';
 import CadastroEmpresa from './pages/CadastroEmpresa';
@@ -18,16 +19,21 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/cadastro-profissional" element={<Cadastro />} />
-          <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
-          <Route path="/pagamento" element={<Pagamento />} />
-          <Route path="/perfil/:id" element={<Perfil />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/orcamento" element={<Orcamento />} />
-        </Routes>
+        <div className="flex flex-col min-h-screen">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/cadastro-profissional" element={<Cadastro />} />
+              <Route path="/cadastro-empresa" element={<CadastroEmpresa />} />
+              <Route path="/pagamento" element={<Pagamento />} />
+              <Route path="/perfil/:id" element={<Perfil />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/orcamento" element={<Orcamento />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
         <Toaster />
       </Router>
     </TooltipProvider>
