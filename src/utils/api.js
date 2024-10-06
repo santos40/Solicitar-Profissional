@@ -37,16 +37,28 @@ export const deleteProfessional = async (id) => {
 };
 
 export const fetchRecentCompanies = async () => {
-  // Simulating API call with mock data
-  return mockCadastrados
-    .filter(item => item.tipo === 'Empresa')
-    .sort((a, b) => b.id - a.id)
-    .slice(0, 9);
+  try {
+    // Simulating API call with mock data
+    const companies = mockCadastrados
+      .filter(item => item.tipo === 'Empresa')
+      .sort((a, b) => b.id - a.id)
+      .slice(0, 9);
+    return companies;
+  } catch (error) {
+    console.error('Error fetching recent companies:', error);
+    return [];
+  }
 };
 
 export const fetchRecentQuotes = async () => {
-  // Simulating API call with mock data
-  return mockOrcamentos.sort((a, b) => b.id - a.id).slice(0, 5);
+  try {
+    // Simulating API call with mock data
+    const quotes = mockOrcamentos.sort((a, b) => b.id - a.id).slice(0, 5);
+    return quotes;
+  } catch (error) {
+    console.error('Error fetching recent quotes:', error);
+    return [];
+  }
 };
 
 export const updateQuote = async (quoteData) => {

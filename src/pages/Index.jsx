@@ -9,12 +9,12 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchRecentCompanies, fetchRecentQuotes } from '@/utils/api';
 
 const Index = () => {
-  const { data: recentCompanies } = useQuery({
+  const { data: recentCompanies, isLoading: isLoadingCompanies } = useQuery({
     queryKey: ['recentCompanies'],
     queryFn: fetchRecentCompanies,
   });
 
-  const { data: recentQuotes } = useQuery({
+  const { data: recentQuotes, isLoading: isLoadingQuotes } = useQuery({
     queryKey: ['recentQuotes'],
     queryFn: fetchRecentQuotes,
   });
@@ -69,36 +69,44 @@ const Index = () => {
       </div>
 
       <h2 className="text-2xl font-semibold mb-4">Empresas Recentemente Cadastradas</h2>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {recentCompanies?.slice(0, 9).map((company) => (
-          <Card key={company.id}>
-            <CardContent className="flex items-center p-4">
-              <Avatar className="h-10 w-10 mr-4">
-                <AvatarImage src={company.logo} alt={company.nome} />
-                <AvatarFallback>{company.nome.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="font-semibold">{company.nome}</h3>
-                <p className="text-sm text-gray-500">{company.categoria}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {isLoadingCompanies ? (
+        <p>Carregando empresas...</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          {recentCompanies?.slice(0, 9).map((company) => (
+            <Card key={company.id}>
+              <CardContent className="flex items-center p-4">
+                <Avatar className="h-10 w-10 mr-4">
+                  <AvatarImage src={company.logo} alt={company.nome} />
+                  <AvatarFallback>{company.nome.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold">{company.nome}</h3>
+                  <p className="text-sm text-gray-500">{company.categoria}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <h2 className="text-2xl font-semibold mb-4">Pedidos de Orçamento Recentes</h2>
-      <div className="space-y-4">
-        {recentQuotes?.slice(0, 5).map((quote) => (
-          <Card key={quote.id}>
-            <CardContent className="p-4">
-              <h3 className="font-semibold">{quote.nome}</h3>
-              <p className="text-sm text-gray-500">{quote.cidade}</p>
-              <p>{quote.descricao}</p>
-              <p className="text-sm">WhatsApp: {quote.whatsapp.slice(0, -3)}***</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {isLoadingQuotes ? (
+        <p>Carregando pedidos de orçamento...</p>
+      ) : (
+        <div className="space-y-4">
+          {recentQuotes?.slice(0, 5).map((quote) => (
+            <Card key={quote.id}>
+              <CardContent className="p-4">
+                <h3 className="font-semibold">{quote.nome}</h3>
+                <p className="text-sm text-gray-500">{quote.cidade}</p>
+                <p>{quote.descricao}</p>
+                <p className="text-sm">WhatsApp: {quote.whatsapp?.slice(0, -3)}***</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
