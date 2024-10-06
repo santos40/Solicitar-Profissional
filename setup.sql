@@ -17,7 +17,9 @@ CREATE TABLE IF NOT EXISTS profissionais (
     website VARCHAR(255),
     logo VARCHAR(255),
     pago BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    cliques INT DEFAULT 0,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultima_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Create the admins table
@@ -29,10 +31,22 @@ CREATE TABLE IF NOT EXISTS admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert a default admin user
+-- Insert a default admin user with a temporary password
 INSERT INTO admins (username, password) 
-VALUES ('admin', 'primeiro_acesso')
+VALUES ('admin', 'temp_password_123')
 ON DUPLICATE KEY UPDATE username = 'admin';
+
+-- Create the orcamentos table
+CREATE TABLE IF NOT EXISTS orcamentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    descricao TEXT NOT NULL,
+    categoria VARCHAR(100) NOT NULL,
+    status ENUM('pendente', 'em_andamento', 'concluido') DEFAULT 'pendente',
+    data_solicitacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Create the categorias table
 CREATE TABLE IF NOT EXISTS categorias (

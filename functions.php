@@ -1,12 +1,15 @@
 <?php
 
-function getProfissionais($conn) {
-    $stmt = $conn->query("SELECT * FROM profissionais WHERE pago = 1 ORDER BY RAND() LIMIT 10");
+function getProfissionais($conn, $limit = 10, $offset = 0, $orderBy = 'cliques', $order = 'DESC') {
+    $stmt = $conn->prepare("SELECT * FROM profissionais WHERE pago = 1 ORDER BY $orderBy $order LIMIT :limit OFFSET :offset");
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
     return $stmt->fetchAll();
 }
 
 function getCategorias($conn) {
-    $stmt = $conn->query("SELECT DISTINCT categoria FROM profissionais ORDER BY categoria");
+    $stmt = $conn->query("SELECT * FROM categorias ORDER BY nome");
     return $stmt->fetchAll();
 }
 
@@ -51,7 +54,7 @@ function getAllProfissionais($conn) {
 }
 
 function updateProfissional($conn, $id, $nome, $categoria, $cidade, $whatsapp, $descricao, $youtube, $instagram, $website, $pago) {
-    $stmt = $conn->prepare("UPDATE profissionais SET nome = ?, categoria = ?, cidade = ?, whatsapp = ?, descricao = ?, youtube = ?, instagram = ?, website = ?, pago = ? WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE profissionais SET nome = ?, categoria = ?, cidade = ?, whatsapp = ?, descricao = ?, youtube = ?, instagram = ?, website = ?, pago = ?, ultima_atualizacao = CURRENT_TIMESTAMP WHERE id = ?");
     $stmt->execute([$nome, $categoria, $cidade, $whatsapp, $descricao, $youtube, $instagram, $website, $pago, $id]);
 }
 
@@ -93,9 +96,7 @@ function sanitizeInput($input) {
 }
 
 function validateWhatsApp($whatsapp) {
-    // Remove any non-digit characters
     $whatsapp = preg_replace('/\D/', '', $whatsapp);
-    // Check if the number has 10-14 digits (international format)
     return preg_match('/^[1-9]\d{9,13}$/', $whatsapp);
 }
 
@@ -128,43 +129,45 @@ function getCategoriasCount($conn) {
     return $result['total'];
 }
 
-function backupDatabase($conn, $backupDir) {
-    $tables = [];
-    $result = $conn->query("SHOW TABLES");
-    while ($row = $result->fetch(PDO::FETCH_NUM)) {
-        $tables[] = $row[0];
+function getMaisClicados($conn, $limit = 10) {
+    $stmt = $conn->prepare("SELECT * FROM profissionais WHERE pago = 1 ORDER BY cliques DESC LIMIT ?");
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll();
+}
+
+function incrementarCliques($conn, $id) {
+    $stmt = $conn->prepare("UPDATE profissionais SET cliques = cliques + 1 WHERE id = ?");
+    $stmt->execute([$id]);
+}
+
+function getOrcamentos($conn, $status = null) {
+    $sql = "SELECT * FROM orcamentos";
+    if ($status) {
+        $sql .= " WHERE status = ?";
     }
-
-    $backupFile = $backupDir . 'backup_' . date('Y-m-d_H-i-s') . '.sql';
-    $output = '';
-
-    foreach ($tables as $table) {
-        $result = $conn->query("SELECT * FROM $table");
-        $numFields = $result->columnCount();
-
-        $output .= "DROP TABLE IF EXISTS $table;";
-        $row2 = $conn->query("SHOW CREATE TABLE $table")->fetch(PDO::FETCH_NUM);
-        $output .= "\n\n" . $row2[1] . ";\n\n";
-
-        while ($row = $result->fetch(PDO::FETCH_NUM)) {
-            $output .= "INSERT INTO $table VALUES(";
-            for ($j = 0; $j < $numFields; $j++) {
-                $row[$j] = addslashes($row[$j]);
-                $row[$j] = str_replace("\n", "\\n", $row[$j]);
-                if (isset($row[$j])) {
-                    $output .= '"' . $row[$j] . '"';
-                } else {
-                    $output .= '""';
-                }
-                if ($j < ($numFields - 1)) {
-                    $output .= ',';
-                }
-            }
-            $output .= ");\n";
-        }
-        $output .= "\n\n";
+    $sql .= " ORDER BY data_solicitacao DESC";
+    
+    $stmt = $conn->prepare($sql);
+    if ($status) {
+        $stmt->execute([$status]);
+    } else {
+        $stmt->execute();
     }
+    return $stmt->fetchAll();
+}
 
-    file_put_contents($backupFile, $output);
-    return $backupFile;
+function updateOrcamentoStatus($conn, $id, $status) {
+    $stmt = $conn->prepare("UPDATE orcamentos SET status = ? WHERE id = ?");
+    $stmt->execute([$status, $id]);
+}
+
+function deleteOrcamento($conn, $id) {
+    $stmt = $conn->prepare("DELETE FROM orcamentos WHERE id = ?");
+    $stmt->execute([$id]);
+}
+
+function addOrcamento($conn, $nome, $email, $telefone, $descricao, $categoria) {
+    $stmt = $conn->prepare("INSERT INTO orcamentos (nome, email, telefone, descricao, categoria) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$nome, $email, $telefone, $descricao, $categoria]);
+    return $conn->lastInsertId();
 }
