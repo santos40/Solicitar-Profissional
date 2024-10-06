@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert a default admin user with a temporary password
+-- Insert a default admin user with the new password 'admin123'
 INSERT INTO admins (username, password) 
-VALUES ('admin', 'temp_password_123')
+VALUES ('admin', 'admin123')
 ON DUPLICATE KEY UPDATE username = 'admin';
 
 -- Create the orcamentos table
