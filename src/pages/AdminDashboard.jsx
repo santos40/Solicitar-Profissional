@@ -6,6 +6,7 @@ import OverviewTab from '@/components/admin/OverviewTab';
 import ProfissionaisTab from '@/components/admin/ProfissionaisTab';
 import CategoriasTab from '@/components/admin/CategoriasTab';
 import OrcamentosTab from '@/components/admin/OrcamentosTab';
+import QuotesTab from '@/components/admin/QuotesTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -27,6 +28,7 @@ const AdminDashboard = () => {
           <TabsTrigger value="profissionais">Profissionais</TabsTrigger>
           <TabsTrigger value="categorias">Categorias</TabsTrigger>
           <TabsTrigger value="orcamentos">Orçamentos</TabsTrigger>
+          <TabsTrigger value="quotes">Pedidos de Orçamento</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview">
@@ -43,6 +45,10 @@ const AdminDashboard = () => {
 
         <TabsContent value="orcamentos">
           <OrcamentosTab orcamentos={data.orcamentosRecentes} />
+        </TabsContent>
+
+        <TabsContent value="quotes">
+          <QuotesTab quotes={data.quotes} />
         </TabsContent>
       </Tabs>
     </div>

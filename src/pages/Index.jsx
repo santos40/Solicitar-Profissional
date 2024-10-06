@@ -4,8 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Search, UserPlus, Building2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from '@tanstack/react-query';
+import { fetchRecentCompanies, fetchRecentQuotes } from '@/utils/api';
 
 const Index = () => {
+  const { data: recentCompanies } = useQuery({
+    queryKey: ['recentCompanies'],
+    queryFn: fetchRecentCompanies,
+  });
+
+  const { data: recentQuotes } = useQuery({
+    queryKey: ['recentQuotes'],
+    queryFn: fetchRecentQuotes,
+  });
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Bem-vindo ao ViaWhatsApp</h1>
@@ -19,7 +32,7 @@ const Index = () => {
         </form>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
         <Card>
           <CardHeader>
             <CardTitle>Cadastre-se como Profissional</CardTitle>
@@ -49,10 +62,42 @@ const Index = () => {
         </Card>
       </div>
 
-      <div className="text-center mt-8">
-        <Link to="/cadastrados">
-          <Button variant="outline">Ver Todos os Profissionais e Empresas</Button>
+      <div className="text-center mb-8">
+        <Link to="/cadastrados" className="text-blue-600 hover:underline">
+          Ver Todos os Profissionais e Empresas
         </Link>
+      </div>
+
+      <h2 className="text-2xl font-semibold mb-4">Empresas Recentemente Cadastradas</h2>
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        {recentCompanies?.slice(0, 9).map((company) => (
+          <Card key={company.id}>
+            <CardContent className="flex items-center p-4">
+              <Avatar className="h-10 w-10 mr-4">
+                <AvatarImage src={company.logo} alt={company.nome} />
+                <AvatarFallback>{company.nome.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="font-semibold">{company.nome}</h3>
+                <p className="text-sm text-gray-500">{company.categoria}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-semibold mb-4">Pedidos de Orçamento Recentes</h2>
+      <div className="space-y-4">
+        {recentQuotes?.slice(0, 5).map((quote) => (
+          <Card key={quote.id}>
+            <CardContent className="p-4">
+              <h3 className="font-semibold">{quote.nome}</h3>
+              <p className="text-sm text-gray-500">{quote.cidade}</p>
+              <p>{quote.descricao}</p>
+              <p className="text-sm">WhatsApp: {quote.whatsapp.slice(0, -3)}***</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

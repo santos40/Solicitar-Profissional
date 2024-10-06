@@ -35,3 +35,22 @@ export const deleteProfessional = async (id) => {
   console.log('Deleting professional:', id);
   return { success: true };
 };
+
+export const fetchRecentCompanies = async () => {
+  // Simulating API call with mock data
+  return mockCadastrados
+    .filter(item => item.tipo === 'Empresa')
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 9);
+};
+
+export const fetchRecentQuotes = async () => {
+  // Simulating API call with mock data
+  return mockOrcamentos.sort((a, b) => b.id - a.id).slice(0, 5);
+};
+
+export const updateQuote = async (quoteData) => {
+  // Simulating API call
+  console.log('Updating quote:', quoteData);
+  return { success: true };
+};
