@@ -171,3 +171,19 @@ function addOrcamento($conn, $nome, $email, $telefone, $descricao, $categoria) {
     $stmt->execute([$nome, $email, $telefone, $descricao, $categoria]);
     return $conn->lastInsertId();
 }
+
+function getOrcamentosCount($conn, $status = null) {
+    $sql = "SELECT COUNT(*) as total FROM orcamentos";
+    if ($status) {
+        $sql .= " WHERE status = ?";
+    }
+    
+    $stmt = $conn->prepare($sql);
+    if ($status) {
+        $stmt->execute([$status]);
+    } else {
+        $stmt->execute();
+    }
+    $result = $stmt->fetch();
+    return $result['total'];
+}

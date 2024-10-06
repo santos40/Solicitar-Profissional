@@ -1,25 +1,68 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 const fetchDashboardData = async () => {
   const response = await fetch('/api/admin/dashboard');
-  if (!response.ok) {
-    throw new Error('Failed to fetch dashboard data');
-  }
+  if (!response.ok) throw new Error('Failed to fetch dashboard data');
   return response.json();
 };
 
 const AdminDashboard = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("overview");
+  const [newCategory, setNewCategory] = useState("");
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['adminDashboard'],
     queryFn: fetchDashboardData,
   });
 
-  const [activeTab, setActiveTab] = useState("overview");
+  const addCategoryMutation = useMutation({
+    mutationFn: async (categoryName) => {
+      const response = await fetch('/api/admin/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: categoryName }),
+      });
+      if (!response.ok) throw new Error('Failed to add category');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminDashboard']);
+      toast({ title: "Categoria adicionada com sucesso" });
+      setNewCategory("");
+    },
+    onError: (error) => {
+      toast({ title: "Erro ao adicionar categoria", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const toggleProfessionalStatusMutation = useMutation({
+    mutationFn: async ({ id, pago }) => {
+      const response = await fetch(`/api/admin/professionals/${id}/toggle-status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pago }),
+      });
+      if (!response.ok) throw new Error('Failed to toggle professional status');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminDashboard']);
+      toast({ title: "Status do profissional atualizado" });
+    },
+    onError: (error) => {
+      toast({ title: "Erro ao atualizar status", description: error.message, variant: "destructive" });
+    },
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -87,7 +130,13 @@ const AdminDashboard = () => {
                       <TableCell>{prof.categoria}</TableCell>
                       <TableCell>{prof.pago ? 'Pago' : 'Pendente'}</TableCell>
                       <TableCell>
-                        <Button variant="outline" size="sm">Editar</Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toggleProfessionalStatusMutation.mutate({ id: prof.id, pago: !prof.pago })}
+                        >
+                          {prof.pago ? 'Marcar como Pendente' : 'Marcar como Pago'}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -103,12 +152,21 @@ const AdminDashboard = () => {
               <CardTitle>Categorias</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul>
+              <ul className="mb-4">
                 {data.categorias.map((categoria) => (
                   <li key={categoria.id}>{categoria.nome}</li>
                 ))}
               </ul>
-              <Button className="mt-4">Adicionar Categoria</Button>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Nova categoria"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                />
+                <Button onClick={() => addCategoryMutation.mutate(newCategory)}>
+                  Adicionar Categoria
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -135,7 +193,22 @@ const AdminDashboard = () => {
                       <TableCell>{orcamento.servico}</TableCell>
                       <TableCell>{orcamento.status}</TableCell>
                       <TableCell>
-                        <Button variant="outline" size="sm">Detalhes</Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">Detalhes</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Detalhes do Orçamento</DialogTitle>
+                            </DialogHeader>
+                            <div>
+                              <p><strong>Cliente:</strong> {orcamento.nome}</p>
+                              <p><strong>Serviço:</strong> {orcamento.servico}</p>
+                              <p><strong>Status:</strong> {orcamento.status}</p>
+                              <p><strong>Descrição:</strong> {orcamento.descricao}</p>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </TableCell>
                     </TableRow>
                   ))}
