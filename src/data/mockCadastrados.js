@@ -8,15 +8,7 @@ export const mockCadastrados = [
     tipo: "Profissional",
     logo: "/placeholder.svg",
     rating: 4.5,
-    descricao: "Pedreiro experiente com mais de 15 anos no mercado. Especializado em construções residenciais e reformas.",
-    tags: ["construção", "reforma", "alvenaria"],
-    dataCadastro: "2023-01-15",
-    likes: 25,
-    dislikes: 2,
-    comments: [
-      { author: "Maria", text: "Ótimo trabalho! Recomendo.", date: "2023-05-10" },
-      { author: "Pedro", text: "Profissional pontual e eficiente.", date: "2023-06-15" }
-    ]
+    pago: true
   },
   {
     id: 2,
@@ -28,12 +20,7 @@ export const mockCadastrados = [
     tipo: "Empresa",
     logo: "/placeholder.svg",
     rating: 4.2,
-    descricao: "Construtora com vasta experiência em obras de grande porte.",
-    tags: ["construção", "empresa", "obras"],
-    dataCadastro: "2023-02-20",
-    likes: 15,
-    dislikes: 1,
-    comments: []
+    pago: true
   },
   {
     id: 3,
@@ -44,12 +31,7 @@ export const mockCadastrados = [
     tipo: "Profissional",
     logo: "/placeholder.svg",
     rating: 4.8,
-    descricao: "Eletricista qualificado, especializado em instalações residenciais.",
-    tags: ["eletricidade", "instalações", "residencial"],
-    dataCadastro: "2023-03-10",
-    likes: 30,
-    dislikes: 0,
-    comments: []
+    pago: false
   },
   {
     id: 4,
@@ -61,12 +43,7 @@ export const mockCadastrados = [
     tipo: "Empresa",
     logo: "/placeholder.svg",
     rating: 3.9,
-    descricao: "Serviços de pintura interna e externa com qualidade garantida.",
-    tags: ["pintura", "serviços", "qualidade"],
-    dataCadastro: "2023-04-05",
-    likes: 10,
-    dislikes: 5,
-    comments: []
+    pago: true
   },
   {
     id: 5,
@@ -77,12 +54,7 @@ export const mockCadastrados = [
     tipo: "Profissional",
     logo: "/placeholder.svg",
     rating: 4.7,
-    descricao: "Especialista em jardinagem e paisagismo.",
-    tags: ["jardinagem", "paisagismo", "verde"],
-    dataCadastro: "2023-05-15",
-    likes: 20,
-    dislikes: 1,
-    comments: []
+    pago: false
   },
   {
     id: 6,
@@ -91,12 +63,24 @@ export const mockCadastrados = [
     cidade: "Porto Alegre",
     whatsapp: "+5551987654321",
     website: "www.techinstalacoes.com.br",
+    tipo: "Empresa",
+    logo: "/placeholder.svg",
     rating: 4.1,
-    descricao: "Instalações elétricas seguras e eficientes.",
-    tags: ["instalações", "elétricas", "segurança"],
-    dataCadastro: "2023-06-25",
-    likes: 5,
-    dislikes: 0,
-    comments: []
+    pago: true
   },
+];
+
+export const mockCategorias = [
+  { id: 1, nome: "Pedreiro" },
+  { id: 2, nome: "Construtora" },
+  { id: 3, nome: "Eletricista" },
+  { id: 4, nome: "Pintura" },
+  { id: 5, nome: "Jardinagem" },
+  { id: 6, nome: "Instalações Elétricas" }
+];
+
+export const mockOrcamentos = [
+  { id: 1, nome: "Pedro Alves", servico: "Construção de muro", status: "pendente", descricao: "Preciso construir um muro de 20 metros." },
+  { id: 2, nome: "Ana Costa", servico: "Pintura de apartamento", status: "em_andamento", descricao: "Pintura completa de um apartamento de 70m²." },
+  { id: 3, nome: "Carlos Mendes", servico: "Instalação elétrica", status: "concluido", descricao: "Instalação de nova fiação em uma casa." }
 ];

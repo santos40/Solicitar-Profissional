@@ -7,11 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+import { mockCadastrados, mockCategorias, mockOrcamentos } from '@/data/mockCadastrados';
 
 const fetchDashboardData = async () => {
-  const response = await fetch('/api/admin/dashboard');
-  if (!response.ok) throw new Error('Failed to fetch dashboard data');
-  return response.json();
+  // Simulating API call with mock data
+  return {
+    totalProfissionais: mockCadastrados.length,
+    profissionaisPagos: mockCadastrados.filter(p => p.pago).length,
+    orcamentosPendentes: mockOrcamentos.filter(o => o.status === 'pendente').length,
+    profissionais: mockCadastrados,
+    categorias: mockCategorias,
+    orcamentosRecentes: mockOrcamentos
+  };
 };
 
 const AdminDashboard = () => {
@@ -27,13 +34,9 @@ const AdminDashboard = () => {
 
   const addCategoryMutation = useMutation({
     mutationFn: async (categoryName) => {
-      const response = await fetch('/api/admin/categories', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: categoryName }),
-      });
-      if (!response.ok) throw new Error('Failed to add category');
-      return response.json();
+      // Simulating API call
+      console.log('Adding category:', categoryName);
+      return { success: true };
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['adminDashboard']);
@@ -47,13 +50,9 @@ const AdminDashboard = () => {
 
   const toggleProfessionalStatusMutation = useMutation({
     mutationFn: async ({ id, pago }) => {
-      const response = await fetch(`/api/admin/professionals/${id}/toggle-status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pago }),
-      });
-      if (!response.ok) throw new Error('Failed to toggle professional status');
-      return response.json();
+      // Simulating API call
+      console.log('Toggling professional status:', id, pago);
+      return { success: true };
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['adminDashboard']);
