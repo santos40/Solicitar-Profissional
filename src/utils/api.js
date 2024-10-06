@@ -23,3 +23,15 @@ export const addCategory = async (categoryName) => {
   console.log('Adding category:', categoryName);
   return { success: true };
 };
+
+export const editProfessional = async (professionalData) => {
+  // Simulating API call
+  console.log('Editing professional:', professionalData);
+  return { success: true };
+};
+
+export const deleteProfessional = async (id) => {
+  // Simulating API call
+  console.log('Deleting professional:', id);
+  return { success: true };
+};
