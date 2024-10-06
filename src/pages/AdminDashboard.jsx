@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 const fetchDashboardData = async () => {
   const response = await fetch('/api/admin/dashboard');
@@ -17,73 +19,132 @@ const AdminDashboard = () => {
     queryFn: fetchDashboardData,
   });
 
+  const [activeTab, setActiveTab] = useState("overview");
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6">Painel de Administração</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Profissionais</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{data.totalProfissionais}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Profissionais Pagos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{data.profissionaisPagos}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Orçamentos Pendentes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{data.orcamentosPendentes}</p>
-          </CardContent>
-        </Card>
-      </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="profissionais">Profissionais</TabsTrigger>
+          <TabsTrigger value="categorias">Categorias</TabsTrigger>
+          <TabsTrigger value="orcamentos">Orçamentos</TabsTrigger>
+        </TabsList>
 
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Profissionais Mais Clicados</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.profissionaisMaisClicados}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="nome" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="cliques" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+        <TabsContent value="overview">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Total de Profissionais</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold">{data.totalProfissionais}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Profissionais Pagos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold">{data.profissionaisPagos}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Orçamentos Pendentes</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-4xl font-bold">{data.orcamentosPendentes}</p>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Cadastros Recentes</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2">
-            {data.cadastrosRecentes.map((cadastro) => (
-              <li key={cadastro.id} className="flex justify-between items-center">
-                <span>{cadastro.nome}</span>
-                <span className="text-sm text-gray-500">{new Date(cadastro.data_cadastro).toLocaleDateString()}</span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+        <TabsContent value="profissionais">
+          <Card>
+            <CardHeader>
+              <CardTitle>Lista de Profissionais</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Categoria</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.profissionais.map((prof) => (
+                    <TableRow key={prof.id}>
+                      <TableCell>{prof.nome}</TableCell>
+                      <TableCell>{prof.categoria}</TableCell>
+                      <TableCell>{prof.pago ? 'Pago' : 'Pendente'}</TableCell>
+                      <TableCell>
+                        <Button variant="outline" size="sm">Editar</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="categorias">
+          <Card>
+            <CardHeader>
+              <CardTitle>Categorias</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul>
+                {data.categorias.map((categoria) => (
+                  <li key={categoria.id}>{categoria.nome}</li>
+                ))}
+              </ul>
+              <Button className="mt-4">Adicionar Categoria</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="orcamentos">
+          <Card>
+            <CardHeader>
+              <CardTitle>Orçamentos Recentes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Cliente</TableHead>
+                    <TableHead>Serviço</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.orcamentosRecentes.map((orcamento) => (
+                    <TableRow key={orcamento.id}>
+                      <TableCell>{orcamento.nome}</TableCell>
+                      <TableCell>{orcamento.servico}</TableCell>
+                      <TableCell>{orcamento.status}</TableCell>
+                      <TableCell>
+                        <Button variant="outline" size="sm">Detalhes</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
