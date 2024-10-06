@@ -1,12 +1,17 @@
 import { mockCadastrados, mockCategorias, mockOrcamentos } from '@/data/mockCadastrados';
 
+// ... keep existing code
+
 export const fetchDashboardData = async () => {
   // Simulating API call with mock data
   return {
     totalProfissionais: mockCadastrados.length,
     profissionaisPagos: mockCadastrados.filter(p => p.pago).length,
     orcamentosPendentes: mockOrcamentos.filter(o => o.status === 'pendente').length,
-    profissionais: mockCadastrados,
+    profissionais: mockCadastrados.map(p => ({
+      ...p,
+      dataCadastro: new Date(Date.now() - Math.random() * 10000000000).toISOString().split('T')[0]
+    })),
     categorias: mockCategorias,
     orcamentosRecentes: mockOrcamentos
   };
@@ -36,6 +41,32 @@ export const deleteProfessional = async (id) => {
   return { success: true };
 };
 
+export const updateQuote = async (quoteData) => {
+  // Simulating API call
+  console.log('Updating quote:', quoteData);
+  return { success: true };
+};
+
+export const deleteQuote = async (id) => {
+  // Simulating API call
+  console.log('Deleting quote:', id);
+  return { success: true };
+};
+
+export const adminLogin = async (credentials) => {
+  // Simulating API call
+  if (credentials.username === 'admin' && credentials.password === 'admin123') {
+    return { success: true, isFirstAccess: true };
+  }
+  throw new Error('Invalid credentials');
+};
+
+export const changeAdminPassword = async (newPassword) => {
+  // Simulating API call
+  console.log('Changing admin password:', newPassword);
+  return { success: true };
+};
+
 export const fetchRecentCompanies = async () => {
   try {
     // Simulating API call with mock data
@@ -59,10 +90,4 @@ export const fetchRecentQuotes = async () => {
     console.error('Error fetching recent quotes:', error);
     return [];
   }
-};
-
-export const updateQuote = async (quoteData) => {
-  // Simulating API call
-  console.log('Updating quote:', quoteData);
-  return { success: true };
 };

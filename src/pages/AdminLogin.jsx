@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { adminLogin } from '@/utils/api';
 
 const formSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -30,33 +31,16 @@ const AdminLogin = () => {
   const onSubmit = async (values) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.isFirstAccess) {
-          navigate('/admin/change-password');
-        } else {
-          navigate('/admin/dashboard');
-        }
+      const response = await adminLogin(values);
+      if (response.isFirstAccess) {
+        navigate('/admin/change-password');
       } else {
-        toast({
-          title: "Error",
-          description: "Invalid credentials",
-          variant: "destructive",
-        });
+        navigate('/admin/dashboard');
       }
     } catch (error) {
-      console.error('Login error:', error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred",
+        description: error.message,
         variant: "destructive",
       });
     } finally {

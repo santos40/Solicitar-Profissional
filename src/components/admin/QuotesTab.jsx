@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateQuote } from '@/utils/api';
+import { updateQuote, deleteQuote } from '@/utils/api';
 
 const QuotesTab = ({ quotes }) => {
   const { toast } = useToast();
@@ -26,12 +26,29 @@ const QuotesTab = ({ quotes }) => {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteQuote,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminDashboard']);
+      toast({ title: "Pedido de orçamento deletado com sucesso" });
+    },
+    onError: (error) => {
+      toast({ title: "Erro ao deletar pedido de orçamento", description: error.message, variant: "destructive" });
+    },
+  });
+
   const handleEdit = (quote) => {
     setEditingQuote({ ...quote });
   };
 
   const handleSaveEdit = () => {
     updateMutation.mutate(editingQuote);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Tem certeza que deseja deletar este pedido de orçamento?")) {
+      deleteMutation.mutate(id);
+    }
   };
 
   return (
@@ -60,7 +77,7 @@ const QuotesTab = ({ quotes }) => {
                 <TableCell>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" onClick={() => handleEdit(quote)}>
+                      <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(quote)}>
                         Editar
                       </Button>
                     </DialogTrigger>
@@ -121,6 +138,13 @@ const QuotesTab = ({ quotes }) => {
                       </DialogClose>
                     </DialogContent>
                   </Dialog>
+                  <Button 
+                    variant="destructive" 
+                    size="sm"
+                    onClick={() => handleDelete(quote.id)}
+                  >
+                    Deletar
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

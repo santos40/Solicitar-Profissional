@@ -74,6 +74,7 @@ const ProfissionaisTab = ({ profissionais }) => {
               <TableHead>Nome</TableHead>
               <TableHead>Categoria</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Data de Cadastro</TableHead>
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -83,6 +84,7 @@ const ProfissionaisTab = ({ profissionais }) => {
                 <TableCell>{prof.nome}</TableCell>
                 <TableCell>{prof.categoria}</TableCell>
                 <TableCell>{prof.pago ? 'Pago' : 'Pendente'}</TableCell>
+                <TableCell>{prof.dataCadastro}</TableCell>
                 <TableCell>
                   <Button 
                     variant="outline" 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { changeAdminPassword } from '@/utils/api';
 
 const formSchema = z.object({
   newPassword: z.string().min(8, 'Password must be at least 8 characters'),
@@ -33,32 +34,16 @@ const AdminChangePassword = () => {
   const onSubmit = async (values) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/admin/change-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ newPassword: values.newPassword }),
+      await changeAdminPassword(values.newPassword);
+      toast({
+        title: "Success",
+        description: "Password changed successfully",
       });
-
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Password changed successfully",
-        });
-        navigate('/admin/dashboard');
-      } else {
-        toast({
-          title: "Error",
-          description: "Failed to change password",
-          variant: "destructive",
-        });
-      }
+      navigate('/admin/dashboard');
     } catch (error) {
-      console.error('Change password error:', error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred",
+        description: "Failed to change password",
         variant: "destructive",
       });
     } finally {
