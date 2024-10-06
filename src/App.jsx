@@ -15,7 +15,6 @@ import PerfilDetalhado from './pages/PerfilDetalhado';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminChangePassword from './pages/AdminChangePassword';
-import AdminProfissionais from './pages/AdminProfissionais';
 import AdminOrcamentos from './pages/AdminOrcamentos';
 import Orcamento from './pages/Orcamento';
 import Cadastrados from './pages/Cadastrados';
@@ -39,7 +38,6 @@ const App = () => (
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 <Route path="/admin/change-password" element={<AdminChangePassword />} />
-                <Route path="/admin/profissionais" element={<AdminProfissionais />} />
                 <Route path="/admin/orcamentos" element={<AdminOrcamentos />} />
                 <Route path="/orcamento" element={<Orcamento />} />
                 <Route path="/cadastrados" element={<Cadastrados />} />
