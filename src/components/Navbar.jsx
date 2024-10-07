@@ -23,7 +23,7 @@ const Navbar = () => {
   return (
     <nav className="bg-primary text-primary-foreground p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">ViaWhatsApp</Link>
+        <Link to="/" className="text-2xl font-bold">Orçamentos Grátis</Link>
         
         {/* Menu para desktop */}
         <ul className="hidden md:flex space-x-4">

@@ -10,7 +10,7 @@ $profissionais = getProfissionais($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViaWhatsApp - Portal de Profissionais</title>
+    <title>Orçamentos Grátis - Portal de Profissionais</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,7 +21,7 @@ $profissionais = getProfissionais($conn);
         <div id="react-root"></div>
 
         <!-- Conteúdo PHP existente -->
-        <h1>Bem-vindo ao ViaWhatsApp</h1>
+        <h1>Bem-vindo ao Orçamentos Grátis</h1>
         <p>Encontre os melhores profissionais da construção e limpeza.</p>
 
         <form action="pesquisa.php" method="GET" class="search-form">
