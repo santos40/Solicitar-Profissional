@@ -1,20 +1,36 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Phone, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const RecentQuotes = () => {
-  const { data: recentQuotes, isLoading } = useQuery({
+  const { data: recentQuotes, isLoading, error } = useQuery({
     queryKey: ['recentQuotes'],
     queryFn: async () => {
       const response = await fetch('/api/admin/orcamentos?limit=5');
+      if (!response.ok) {
+        throw new Error('Failed to fetch recent quotes');
+      }
       return response.json();
     }
   });
 
   const maskPhone = (phone) => {
-    return phone?.slice(0, -3) + '***';
+    if (!phone) return '';
+    return phone.slice(0, -3) + '***';
   };
+
+  if (error) {
+    return (
+      <Alert variant="destructive" className="max-w-4xl mx-auto mt-8">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Erro ao carregar os pedidos de orçamento. Por favor, tente novamente mais tarde.
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <section className="py-16 bg-gray-50">
@@ -22,15 +38,21 @@ const RecentQuotes = () => {
         <h2 className="text-2xl font-bold mb-8 text-center">Últimos Pedidos de Orçamento</h2>
         <div className="grid gap-6 max-w-4xl mx-auto">
           {isLoading ? (
-            <p className="text-center">Carregando pedidos...</p>
+            <Card className="p-6">
+              <p className="text-center">Carregando pedidos...</p>
+            </Card>
+          ) : recentQuotes?.length === 0 ? (
+            <Card className="p-6">
+              <p className="text-center text-gray-500">Nenhum pedido de orçamento encontrado.</p>
+            </Card>
           ) : (
             recentQuotes?.map((quote) => (
               <Card key={quote.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">{quote.servico}</h3>
-                      <p className="text-gray-600 mb-2">{quote.descricao}</p>
+                      <h3 className="font-semibold text-lg mb-2">{quote.categoria}</h3>
+                      <p className="text-gray-600 mb-2">{quote.servico}</p>
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <MapPin className="w-4 h-4" />
                         <span>{quote.cidade}</span>
