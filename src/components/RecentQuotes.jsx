@@ -8,9 +8,9 @@ const RecentQuotes = () => {
   const { data: recentQuotes, isLoading, error } = useQuery({
     queryKey: ['recentQuotes'],
     queryFn: async () => {
-      const response = await fetch('/api/admin/orcamentos?limit=5');
+      const response = await fetch('admin_api.php?route=/api/admin/orcamentos');
       if (!response.ok) {
-        throw new Error('Failed to fetch recent quotes');
+        throw new Error('Falha ao carregar orçamentos');
       }
       return response.json();
     }
@@ -22,6 +22,7 @@ const RecentQuotes = () => {
   };
 
   if (error) {
+    console.error('Erro ao carregar orçamentos:', error);
     return (
       <Alert variant="destructive" className="max-w-4xl mx-auto mt-8">
         <AlertCircle className="h-4 w-4" />
@@ -41,12 +42,12 @@ const RecentQuotes = () => {
             <Card className="p-6">
               <p className="text-center">Carregando pedidos...</p>
             </Card>
-          ) : recentQuotes?.length === 0 ? (
+          ) : !recentQuotes || recentQuotes.length === 0 ? (
             <Card className="p-6">
               <p className="text-center text-gray-500">Nenhum pedido de orçamento encontrado.</p>
             </Card>
           ) : (
-            recentQuotes?.map((quote) => (
+            recentQuotes.map((quote) => (
               <Card key={quote.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
