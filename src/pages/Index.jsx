@@ -26,25 +26,25 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Animated Image */}
-      <section className="relative bg-[#8B5CF6] pt-20 pb-32 overflow-hidden">
+      <section className="relative bg-white pt-20 pb-32 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
                 Conectando Você aos Melhores Profissionais
               </h1>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-gray-600 mb-8">
                 Encontre profissionais qualificados ou divulgue seus serviços de forma simples e eficiente
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/orcamento">
-                  <Button size="lg" className="w-full sm:w-auto bg-white text-[#8B5CF6] hover:bg-white/90">
+                  <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white">
                     <Search className="mr-2 h-5 w-5" />
                     Buscar Profissionais
                   </Button>
                 </Link>
                 <Link to="/cadastro-profissional">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent border-white text-white hover:bg-white/10">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto border-gray-300 text-gray-700 hover:bg-gray-50">
                     <Briefcase className="mr-2 h-5 w-5" />
                     Divulgar Serviços
                   </Button>
@@ -60,7 +60,7 @@ const Index = () => {
                   alt="Profissionais trabalhando"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-[#8B5CF6]/10" />
+                <div className="absolute inset-0 bg-black/5" />
               </div>
             </div>
           </div>
