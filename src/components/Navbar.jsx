@@ -14,16 +14,16 @@ const Navbar = () => {
 
   const menuItems = [
     { to: "/", label: "Início" },
-    { to: "/cadastro-profissional", label: "Cadastro Profissional" },
-    { to: "/cadastro-empresa", label: "Cadastro Empresa" },
-    { to: "/orcamento", label: "Solicitar Orçamento" },
-    { to: "/cadastrados", label: "Cadastrados" },
+    { to: "/cadastro-profissional", label: "Cadastrar Serviço" },
+    { to: "/solicitar-orcamento", label: "Solicitar Orçamento" },
+    { to: "/profissionais", label: "Encontrar Profissionais" },
+    { to: "/como-funciona", label: "Como Funciona" },
   ];
 
   return (
-    <nav className="bg-primary text-primary-foreground p-4">
+    <nav className="bg-primary text-primary-foreground p-4 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">Orçamentos Grátis</Link>
+        <Link to="/" className="text-2xl font-bold">Solicitar Orçamento</Link>
         
         {/* Menu para desktop */}
         <ul className="hidden md:flex space-x-4">

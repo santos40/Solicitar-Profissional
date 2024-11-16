@@ -21,7 +21,10 @@ const Index = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">Bem-vindo ao Orçamentos Grátis</h1>
+      <h1 className="text-4xl font-bold text-center mb-8">Solicite Orçamentos Grátis</h1>
+      <p className="text-center text-lg mb-8">
+        Conectamos você aos melhores profissionais da sua região
+      </p>
       
       <div className="max-w-xl mx-auto mb-8">
         <form className="flex gap-2">

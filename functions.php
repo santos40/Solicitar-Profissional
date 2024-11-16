@@ -14,8 +14,8 @@ function getCategorias($conn) {
 }
 
 function compartilhar($nome, $id) {
-    $url = "https://viawhatsapp.com/perfil.php?id=" . $id;
-    $texto = "Confira o perfil de " . $nome . " no ViaWhatsApp: " . $url;
+    $url = "https://solicitarorcamento.com/perfil.php?id=" . $id;
+    $texto = "Confira o perfil de " . $nome . " no Solicitar Orçamento: " . $url;
     return urlencode($texto);
 }
 

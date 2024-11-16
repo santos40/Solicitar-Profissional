@@ -38,7 +38,7 @@ export const ProfileHeader = ({ perfil }) => (
           "addressLocality": perfil.cidade
         },
         "telephone": perfil.whatsapp,
-        "url": perfil.website,
+        "url": `https://solicitarorcamento.com/perfil/${perfil.id}`,
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": perfil.rating,

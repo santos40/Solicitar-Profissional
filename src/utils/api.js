@@ -1,9 +1,8 @@
 import { mockCadastrados, mockCategorias, mockOrcamentos } from '@/data/mockCadastrados';
 
-// ... keep existing code
+const API_BASE_URL = 'https://solicitarorcamento.com/api';
 
 export const fetchDashboardData = async () => {
-  // Simulating API call with mock data
   return {
     totalProfissionais: mockCadastrados.length,
     profissionaisPagos: mockCadastrados.filter(p => p.pago).length,
