@@ -10,13 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const menuItems = [
     { to: "/", label: "Início" },
     { to: "/cadastro-profissional", label: "Cadastrar Serviço" },
-    { to: "/solicitar-orcamento", label: "Solicitar Orçamento" },
-    { to: "/profissionais", label: "Encontrar Profissionais" },
+    { to: "/orcamento", label: "Solicitar Orçamento" },
+    { to: "/cadastrados", label: "Encontrar Profissionais" },
     { to: "/como-funciona", label: "Como Funciona" },
   ];
 
@@ -26,10 +24,13 @@ const Navbar = () => {
         <Link to="/" className="text-2xl font-bold">Solicitar Orçamento</Link>
         
         {/* Menu para desktop */}
-        <ul className="hidden md:flex space-x-4">
+        <ul className="hidden md:flex space-x-6">
           {menuItems.map((item, index) => (
             <li key={index}>
-              <Link to={item.to} className="hover:text-accent-foreground">
+              <Link 
+                to={item.to} 
+                className="hover:text-accent-foreground transition-colors"
+              >
                 {item.label}
               </Link>
             </li>

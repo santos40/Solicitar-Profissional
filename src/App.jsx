@@ -17,6 +17,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminChangePassword from './pages/AdminChangePassword';
 import Orcamento from './pages/Orcamento';
 import Cadastrados from './pages/Cadastrados';
+import ComoFunciona from './pages/ComoFunciona';
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
                 <Route path="/admin/change-password" element={<AdminChangePassword />} />
                 <Route path="/orcamento" element={<Orcamento />} />
                 <Route path="/cadastrados" element={<Cadastrados />} />
+                <Route path="/como-funciona" element={<ComoFunciona />} />
               </Routes>
             </main>
             <Footer />
