@@ -25,36 +25,54 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-primary/10 to-background pt-20 pb-32">
+      {/* Hero Section with Animated Image */}
+      <section className="relative bg-gradient-to-b from-primary/10 to-background pt-20 pb-32 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
-              Conectando Você aos Melhores Profissionais
-            </h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Encontre profissionais qualificados ou divulgue seus serviços de forma simples e eficiente
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/orcamento">
-                <Button size="lg" className="w-full sm:w-auto">
-                  <Search className="mr-2 h-5 w-5" />
-                  Buscar Profissionais
-                </Button>
-              </Link>
-              <Link to="/cadastro-profissional">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  <Briefcase className="mr-2 h-5 w-5" />
-                  Divulgar Serviços
-                </Button>
-              </Link>
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="flex-1 text-center lg:text-left">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent gradient-primary">
+                Conectando Você aos Melhores Profissionais
+              </h1>
+              <p className="text-xl text-gray-600 mb-8">
+                Encontre profissionais qualificados ou divulgue seus serviços de forma simples e eficiente
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Link to="/orcamento">
+                  <Button size="lg" className="w-full sm:w-auto gradient-primary">
+                    <Search className="mr-2 h-5 w-5" />
+                    Buscar Profissionais
+                  </Button>
+                </Link>
+                <Link to="/cadastro-profissional">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    Divulgar Serviços
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            {/* Animated Image */}
+            <div className="flex-1 relative animate-fade-in">
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-300">
+                <img 
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                  alt="Profissionais trabalhando"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary-purple/20 to-primary-orange/20" />
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Benefits */}
+      {/* Benefits Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {benefits.map((benefit, index) => (
-              <Card key={index} className="bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all">
+              <Card key={index} className="bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all transform hover:scale-105 duration-300">
                 <CardContent className="p-6">
                   <div className="mb-4">{benefit.icon}</div>
                   <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
