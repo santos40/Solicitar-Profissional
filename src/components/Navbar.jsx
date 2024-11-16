@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { Menu, Database } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,7 +21,18 @@ const Navbar = () => {
   return (
     <nav className="bg-primary text-primary-foreground p-4 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">Solicitar Orçamento</Link>
+        <div className="flex items-center gap-4">
+          <Link to="/" className="text-2xl font-bold">Solicitar Orçamento</Link>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="hidden md:flex items-center gap-2"
+            onClick={() => window.open('https://supabase.com', '_blank')}
+          >
+            <Database className="h-4 w-4" />
+            Supabase
+          </Button>
+        </div>
         
         {/* Menu para desktop */}
         <ul className="hidden md:flex space-x-6">
@@ -46,6 +57,15 @@ const Navbar = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px]">
+            <DropdownMenuItem asChild>
+              <button
+                className="w-full flex items-center gap-2"
+                onClick={() => window.open('https://supabase.com', '_blank')}
+              >
+                <Database className="h-4 w-4" />
+                Supabase
+              </button>
+            </DropdownMenuItem>
             {menuItems.map((item, index) => (
               <DropdownMenuItem key={index} asChild>
                 <Link to={item.to} className="w-full">
