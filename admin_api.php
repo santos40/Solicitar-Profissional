@@ -22,6 +22,8 @@ if ($route === '/api/admin/dashboard' && $method === 'GET') {
     addCategory($conn);
 } elseif (preg_match('/^\/api\/admin\/professionals\/(\d+)\/toggle-status$/', $route, $matches) && $method === 'POST') {
     toggleProfessionalStatus($conn, $matches[1]);
+} elseif ($route === '/api/admin/orcamentos' && $method === 'GET') {
+    getRecentOrcamentos($conn);
 } else {
     http_response_code(404);
     echo json_encode(['error' => 'Not Found']);
@@ -69,4 +71,12 @@ function toggleProfessionalStatus($conn, $id) {
         http_response_code(500);
         echo json_encode(['error' => 'Failed to update professional status']);
     }
+}
+
+function getRecentOrcamentos($conn) {
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 5;
+    $stmt = $conn->prepare("SELECT * FROM orcamentos ORDER BY data_solicitacao DESC LIMIT ?");
+    $stmt->execute([$limit]);
+    $orcamentos = $stmt->fetchAll();
+    echo json_encode($orcamentos);
 }
