@@ -25,6 +25,8 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(142, 76%, 36%)", // Verde
+          purple: "hsl(277, 75%, 84%)", // Roxo suave
+          orange: "hsl(22, 90%, 57%)", // Laranja vibrante
           foreground: "hsl(0, 0%, 100%)",
         },
         secondary: {
