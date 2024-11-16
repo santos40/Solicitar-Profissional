@@ -26,11 +26,11 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Animated Image */}
-      <section className="relative bg-gradient-to-b from-primary/10 to-background pt-20 pb-32 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-[#FFE29F]/20 to-background pt-20 pb-32 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent gradient-primary">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#FF719A] via-[#FFA99F] to-[#FFE29F]">
                 Conectando Você aos Melhores Profissionais
               </h1>
               <p className="text-xl text-gray-600 mb-8">
@@ -38,7 +38,7 @@ const Index = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/orcamento">
-                  <Button size="lg" className="w-full sm:w-auto gradient-primary">
+                  <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-[#FF719A] to-[#FFA99F] hover:opacity-90">
                     <Search className="mr-2 h-5 w-5" />
                     Buscar Profissionais
                   </Button>
@@ -60,14 +60,13 @@ const Index = () => {
                   alt="Profissionais trabalhando"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary-purple/20 to-primary-orange/20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FF719A]/20 via-[#FFA99F]/20 to-[#FFE29F]/20" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
